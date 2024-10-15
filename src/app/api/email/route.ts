@@ -1,3 +1,4 @@
+import request from "request";
 import mailer from "./mailer";
 export async function POST(req: Request) {
   let res = {
@@ -18,6 +19,16 @@ export async function POST(req: Request) {
 
 export async function GET() {
   // const body = await req.text();
+  const event = { test: 'testevent'}
+  request.post({
+    headers: {'content-type' : 'application/json'},
+    url:     'https://ses-email-logs.vercel.app',
+    body:    JSON.stringify(event)
+  }, function(error){
+    console.log('error', error);
+    // console.log('response', response);
+    // console.log('body', body);
+  });
 
   return new Response(JSON.stringify({ received: true }));
 }
