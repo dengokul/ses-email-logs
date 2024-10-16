@@ -1,4 +1,4 @@
-import request from "request";
+// import request from "request";
 import mailer from "./mailer";
 export async function POST(req: Request) {
   const reqBody = await req.text();
@@ -15,16 +15,24 @@ export async function POST(req: Request) {
 
 export async function GET() {
   // const body = await req.text();
-  const event = { test: 'testevent' }
-  request.post({
-    headers: { 'content-type': 'application/json' },
-    url: 'https://ses-email-logs.vercel.app',
-    body: JSON.stringify(event)
-  }, function (error) {
-    console.log('error', error);
-    // console.log('response', response);
-    // console.log('body', body);
-  });
+
+  try {
+    const customHeaders = {
+      "Content-Type": "application/json",
+    }
+    const eventData = { test_new: 'test' }
+    /*global fetch*/
+    const fetchRes = await fetch('https://ses-email-logs.vercel.app', {
+      method: "POST",
+      headers: customHeaders,
+      body: JSON.stringify(eventData),
+    });
+    console.log('fetchRes', fetchRes)
+    return Response.json(fetchRes)
+  } catch (error) {
+    console.log('catch error', error)
+    return Response.json(error)
+  }
 
   return new Response(JSON.stringify({ received: true }));
 }
